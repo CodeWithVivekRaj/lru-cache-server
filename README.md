@@ -24,26 +24,16 @@ To install and run the Cache Server locally, follow these steps:
 
 1. **Clone the repository:**
 
-   git clone <repository-url>
+  <pre> <code class="language-json">git clone <repository-url></code></pre>
 
 2. **Navigate to the project directory::**
 
-   cd lru-cache-server
+   <pre><code class="language-json">cd lru-cache-server</code></pre>
 
 3. **Run the server::**
 
-   go run main.go
+   <pre><code class="language-json">go run main.go</code></pre>
 
-<!-- Usage -->
-<h2 id="usage">## Usage</h2>
-
-<p>Once the server is running, you can interact with the cache using the following API endpoints:</p>
-
-<ul>
-  <li><strong>GET /get:</strong> Retrieve a value from the cache.</li>
-  <li><strong>POST /set:</strong> Set a value in the cache.</li>
-  <li><strong>DELETE /delete:</strong> Delete a value from the cache.</li>
-</ul>
 
 <!-- Usage -->
 <h2 id="usage">Usage</h2>
