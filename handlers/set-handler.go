@@ -8,18 +8,35 @@ import (
 	"time"
 )
 
+type SetRequest struct {
+	Key        string `json:"key"`
+	Value      string `json:"value"`
+	Expiration string `json:"expiration"`
+}
+
 func SetHandler(cache *cache.LRUCache) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		key := r.URL.Query().Get("key")
-		value := r.URL.Query().Get("value")
-		expirationStr := r.URL.Query().Get("expiration")
-		expiration, _ := time.ParseDuration(expirationStr)
+		// Decode JSON request body into SetRequest struct
+		var requestData SetRequest
+		err := json.NewDecoder(r.Body).Decode(&requestData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 
-		cache.Set(key, value, expiration)
+		// Parse expiration duration
+		expiration, err := time.ParseDuration(requestData.Expiration)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// Set the key-value pair in the cache
+		cache.Set(requestData.Key, requestData.Value, expiration)
 
 		// Create a map to hold the response data
 		response := map[string]interface{}{
-			"message": fmt.Sprintf("Set %s=%s with expiration %s", key, value, expiration),
+			"message": fmt.Sprintf("Set %s=%s with expiration %s", requestData.Key, requestData.Value, requestData.Expiration),
 		}
 
 		// Encode the response data into JSON format

@@ -3,31 +3,41 @@ package handlers
 import (
 	"cache_server/cache"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
+type Response struct {
+	Message string `json:"message"`
+}
+
 func DeleteHandler(cacheInstance *cache.LRUCache) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		key := r.URL.Query().Get("key")
-		cacheInstance.Remove(key)
 
-		// Create a map to hold the response data
-		response := map[string]interface{}{
-			"message": fmt.Sprintf("Deleted %s", key),
-		}
-
-		// Encode the response data into JSON format
-		jsonResponse, err := json.Marshal(response)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		// Handle preflight OPTIONS request
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
 			return
 		}
 
-		// Set the response headers
-		w.Header().Set("Content-Type", "application/json")
+		if r.Method != http.MethodDelete {
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+			return
+		}
 
-		// Write the JSON response to the response writer
+		key := r.URL.Query().Get("key")
+		cacheInstance.Remove(key)
+
+		// Create the response JSON object
+		response := Response{Message: "Deleted " + key}
+		jsonResponse, err := json.Marshal(response)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		// Set the content type header and send the JSON response
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		w.Write(jsonResponse)
 	}
 }

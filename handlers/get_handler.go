@@ -13,8 +13,9 @@ func GetHandler(cacheInstance *cache.LRUCache) http.HandlerFunc {
 
 		// Create a map to hold the response data
 		response := map[string]interface{}{
-			"key":   key,
-			"value": value,
+			"key":     key,
+			"value":   value,
+			"message": "key value fethed",
 		}
 
 		// Encode the response data into JSON format
