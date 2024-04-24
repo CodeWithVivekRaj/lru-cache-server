@@ -55,7 +55,9 @@ To install and run the Cache Server locally, follow these steps:
 
 <p>Response:</p>
 
-<pre><code class="language-json">"Set mykey1=value1 with expiration 10s"
+<pre><code class="language-json">{
+  "message": "Set mykey1=value1 with expiration 10s"
+}
 </code></pre>
 
 <p>Retrieve the value associated with a key:</p>
@@ -65,7 +67,10 @@ To install and run the Cache Server locally, follow these steps:
 
 <p>Response:</p>
 
-<pre><code class="language-json">"value1"
+<pre><code class="language-json">{
+  "key": "mykey1",
+  "value": "value1"
+}
 </code></pre>
 
 <p>Delete a key-value pair from the cache:</p>
@@ -75,8 +80,11 @@ To install and run the Cache Server locally, follow these steps:
 
 <p>Response:</p>
 
-<pre><code class="language-json">"Deleted mykey1"
+<pre><code class="language-json">{
+  "message": "Deleted mykey1"
+}
 </code></pre>
+
 
 
 
