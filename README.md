@@ -45,28 +45,59 @@ To install and run the Cache Server locally, follow these steps:
   <li><strong>DELETE /delete:</strong> Delete a value from the cache.</li>
 </ul>
 
-<h3>Example</h3>
+<!-- Usage -->
+<h2 id="usage">Usage</h2>
 
-<p>Set a key-value pair in the cache:</p>
-
-<pre><code class="language-bash">curl -X POST "http://localhost:8080/set?key=mykey&amp;value=myvalue&amp;expiration=10s"
-</code></pre>
-
-<p>Retrieve the value associated with a key:</p>
-
-<pre><code class="language-bash">curl -X GET "http://localhost:8080/get?key=mykey"
-</code></pre>
-
-<p>Delete a key-value pair from the cache:</p>
-
-<pre><code class="language-bash">curl -X DELETE "http://localhost:8080/delete?key=mykey"
-</code></pre>
-
-
-<h2 id="endpoints">## Endpoints</h2>
+<p>Once the server is running, you can interact with the cache using the following API endpoints:</p>
 
 <ul>
   <li><strong>GET /get:</strong> Retrieve a value from the cache.</li>
   <li><strong>POST /set:</strong> Set a value in the cache.</li>
   <li><strong>DELETE /delete:</strong> Delete a value from the cache.</li>
 </ul>
+
+<h3>Example</h3>
+
+<p>Set a key-value pair in the cache:</p>
+
+<pre><code class="language-bash">curl -X POST "http://localhost:8080/set?key=mykey1&amp;value=value1&amp;expiration=10s"
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code class="language-json">"Set mykey1=value1 with expiration 10s"
+</code></pre>
+
+<p>Retrieve the value associated with a key:</p>
+
+<pre><code class="language-bash">curl -X GET "http://localhost:8080/get?key=mykey1"
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code class="language-json">"value1"
+</code></pre>
+
+<p>Delete a key-value pair from the cache:</p>
+
+<pre><code class="language-bash">curl -X DELETE "http://localhost:8080/delete?key=mykey1"
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code class="language-json">"Deleted mykey1"
+</code></pre>
+
+
+
+<!-- Endpoints -->
+<h2 id="endpoints">API Endpoints</h2>
+
+<p>The Cache Server provides the following API endpoints:</p>
+
+<ul>
+  <li><strong>GET /get:</strong> Retrieve a value from the cache. Specify the key as a query parameter to retrieve the corresponding value.</li>
+  <li><strong>POST /set:</strong> Set a value in the cache. Provide the key, value, and expiration time (optional) as query parameters.</li>
+  <li><strong>DELETE /delete:</strong> Delete a value from the cache. Specify the key as a query parameter to remove the corresponding key-value pair.</li>
+</ul>
+
