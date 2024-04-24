@@ -24,7 +24,7 @@ To install and run the Cache Server locally, follow these steps:
 
 1. **Clone the repository:**
 
-  <pre> <code class="language-json">git clone <repository-url></code></pre>
+   <pre><code class="language-json">git clone <repository-url></code></pre>
 
 2. **Navigate to the project directory::**
 
