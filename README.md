@@ -89,7 +89,7 @@ To install and run the Cache Server locally, follow these steps:
 <pre><code class="language-json">{
   "key": "mykey1",
   "value": "value1"
-   "message": "key value fethed",
+  "message": "key value fethed",
 }
 </code></pre>
 
