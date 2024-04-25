@@ -119,16 +119,6 @@ To install and run the Cache Server locally, follow these steps:
   <li><strong>DELETE /delete:</strong> Delete a value from the cache. Specify the key as a query parameter to remove the corresponding key-value pair.</li>
 </ul>
 
-<!-- Endpoints -->
-<h2 id="endpoints">API Endpoints</h2>
-
-The Cache Server provides the following API endpoints:
-
-- **GET /get:** Retrieve a value from the cache.
-- **POST /set:** Set a value in the cache.
-- **DELETE /delete:** Delete a value from the cache.
-- **WebSocket Endpoint:** WebSocket endpoint for real-time updates about cache changes.
-
 ### GET /get
 
 - **Description:** Retrieve a value from the cache.
