@@ -3,11 +3,24 @@ package main
 import (
 	"cache_server/cache"
 	"cache_server/handlers"
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
+	"github.com/gorilla/websocket"
 	"github.com/rs/cors"
+)
+
+var (
+	upgrader = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
 )
 
 func main() {
@@ -15,9 +28,15 @@ func main() {
 	cacheInstance := cache.NewLRUCache(10)
 
 	// Register cache API endpoints
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		// console.log("i am hiy")
+		handleWebSocket(cacheInstance, w, r)
+	})
 	http.HandleFunc("/get", handlers.GetHandler(cacheInstance))
 	http.HandleFunc("/set", handlers.SetHandler(cacheInstance))
 	http.HandleFunc("/delete", handlers.DeleteHandler(cacheInstance))
+
+	// WebSocket endpoint
 
 	// CORS middleware with custom options
 	c := cors.New(cors.Options{
@@ -43,5 +62,52 @@ func main() {
 	err := server.ListenAndServe()
 	if err != nil {
 		fmt.Printf("Server error: %v\n", err)
+	}
+
+}
+
+func handleWebSocket(cacheInstance cache.Cache, w http.ResponseWriter, r *http.Request) {
+	// Upgrade HTTP connection to a WebSocket connection
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("Failed to upgrade to WebSocket:", err)
+		return
+	}
+	defer conn.Close()
+
+	// Send initial cache data to the client
+	sendCacheUpdates(conn, cacheInstance)
+
+	// Create a ticker to trigger cache updates at regular intervals (every second)
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			sendCacheUpdates(conn, cacheInstance)
+		case <-r.Context().Done(): // Handle client disconnect
+			return
+		}
+	}
+}
+
+func sendCacheUpdates(conn *websocket.Conn, cacheInstance cache.Cache) {
+	// Retrieve current cache data
+	cacheData := cacheInstance.GetDataArray()
+
+	// Marshal cache data to JSON
+	jsonData, err := json.Marshal(cacheData)
+	fmt.Println(jsonData)
+	if err != nil {
+		log.Println("Error encoding JSON:", err)
+		return
+	}
+
+	// Write JSON data to WebSocket connection
+	err = conn.WriteMessage(websocket.TextMessage, jsonData)
+	if err != nil {
+		log.Println("Error writing message to WebSocket:", err)
+		return
 	}
 }
