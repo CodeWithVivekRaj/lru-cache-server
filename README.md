@@ -2,7 +2,7 @@
 <h1 align="center">LRU Cache Server</h1>
 
 <!-- Description -->
-<p align="center">Lightweight HTTP server built with GoLang for simple caching mechanism.</p>
+<p align="center">Lightweight HTTP server built with GoLang for simple caching mechanism with real-time updates using WebSocket.</p>
 
 <!-- Table of Contents -->
 ## Table of Contents
@@ -16,6 +16,25 @@
 ## About
 
 LRU Cache Server is a lightweight HTTP server built with GoLang that provides a simple caching mechanism. It allows users to store key-value pairs with expiration times and retrieve them later via HTTP API endpoints.
+
+### Key Features
+
+- **Simple Caching Mechanism:** Allows users to store key-value pairs with expiration times.
+- **HTTP API Endpoints:** Provides endpoints for setting, retrieving, and deleting values from the cache.
+- **Real-time Updates:** Supports WebSocket for real-time updates about cache changes.
+- **Efficient LRU Algorithm:** Uses a Least Recently Used (LRU) eviction policy to maintain cache size and performance.
+
+### Purpose
+
+The purpose of this project is to offer a lightweight and easy-to-use caching solution for applications that require temporary storage of key-value data. Whether it's caching API responses, session data, or frequently accessed resources, the LRU Cache Server provides a reliable and efficient way to manage and access cached data.
+
+### Goals
+
+- Provide a simple and intuitive API for interacting with the cache.
+- Ensure high performance and efficiency in storing and accessing cached data.
+- Support real-time updates to connected clients through WebSocket.
+- Maintain code simplicity and readability for easy maintenance and future enhancements.
+  
 
 <!-- Installation -->
 ## Installation
@@ -70,6 +89,7 @@ To install and run the Cache Server locally, follow these steps:
 <pre><code class="language-json">{
   "key": "mykey1",
   "value": "value1"
+   "message": "key value fethed",
 }
 </code></pre>
 
@@ -98,4 +118,52 @@ To install and run the Cache Server locally, follow these steps:
   <li><strong>POST /set:</strong> Set a value in the cache. Provide the key, value, and expiration time (optional) as query parameters.</li>
   <li><strong>DELETE /delete:</strong> Delete a value from the cache. Specify the key as a query parameter to remove the corresponding key-value pair.</li>
 </ul>
+
+<!-- Endpoints -->
+<h2 id="endpoints">API Endpoints</h2>
+
+The Cache Server provides the following API endpoints:
+
+- **GET /get:** Retrieve a value from the cache.
+- **POST /set:** Set a value in the cache.
+- **DELETE /delete:** Delete a value from the cache.
+- **WebSocket Endpoint:** WebSocket endpoint for real-time updates about cache changes.
+
+### GET /get
+
+- **Description:** Retrieve a value from the cache.
+- **Request:** GET /get?key=<key>
+- **Response:** JSON object containing the key-value pair.
+
+### POST /set
+
+- **Description:** Set a value in the cache.
+- **Request:** POST /set with JSON body: {"key": "example_key", "value": "example_value", "expiration": "10s"}
+- **Response:** JSON object confirming the key-value pair was set.
+
+### DELETE /delete
+
+- **Description:** Delete a value from the cache.
+- **Request:** DELETE /delete?key=<key>
+- **Response:** JSON object confirming the key was deleted.
+
+### WebSocket Endpoint
+
+- **Description:** The WebSocket endpoint provides real-time updates about cache changes. Clients can connect to this endpoint to receive JSON messages containing cache updates.
+  
+- **Endpoint:** `ws://localhost:8080/ws`
+  
+- **Response Format:** JSON object representing cache updates. Each object includes the following fields:
+  - `"key"`: The key of the cache item.
+  - `"value"`: The value associated with the key.
+  - `"duration"`: The remaining time until the expiration of the cache item.
+
+**Example Response:**
+```json
+{
+  "key": "example_key",
+  "value": "example_value",
+  "duration": "5m"
+}
+
 
